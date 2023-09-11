@@ -4,6 +4,7 @@ import ClientOnly from "../client-only";
 import CreateServerModal from "../modals/create-server-modal";
 import EditServerModal from "../modals/edit-server-modal";
 import InviteModal from "../modals/invite-modal";
+import MembersModal from "../modals/members-modal";
 
 export default function ModalProvider() {
   return (
@@ -11,6 +12,7 @@ export default function ModalProvider() {
       <CreateServerModal />
       <InviteModal />
       <EditServerModal />
+      <MembersModal />
     </ClientOnly>
   )
 }
