@@ -11,16 +11,27 @@ export async function PATCH(req: Request, { params }: { params: { serverId: stri
     const server = await db.server.update({
       where: {
         id: params.serverId,
-        profileId: profile.id
+        profileId: {
+          not: profile.id
+        },
+        members: {
+          some: {
+            profileId: profile.id
+          }
+        }
       },
       data: {
-        inviteCode: uuidv4()
+        members: {
+          deleteMany: {
+            profileId: profile.id
+          }
+        }
       }
     })
 
     return NextResponse.json(server);
   } catch (err) {
-    console.log("[SERVER_ID_INVITE]", err);
+    console.log("[SERVER_ID_LEAVE]", err);
     return new NextResponse("Internal Error", { status: 500 })
   }
 }
