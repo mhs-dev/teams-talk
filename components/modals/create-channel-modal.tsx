@@ -14,6 +14,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
 import { ChannelType } from '@prisma/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -27,13 +28,14 @@ const formSchema = z.object({
 interface CreateChannelModalProps {}
 
 export default function CreateChannelModal({}: CreateChannelModalProps) {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type === 'createChannel';
+  const { channelType } = data;
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT
+      type: channelType || ChannelType.TEXT
     }
   });
   const router = useRouter();
@@ -59,6 +61,14 @@ export default function CreateChannelModal({}: CreateChannelModalProps) {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    } else {
+      form.setValue("type", ChannelType.TEXT);
+    }
+  }, [channelType, form])
   return (
     <Dialog
       open={isModalOpen}
