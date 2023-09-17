@@ -23,7 +23,6 @@ export default function SocketProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const socketIns = new (ClientIo as any)(process.env.NEXT_PUBLIC_SITE_URL!, {
       path: '/api/socket/io',
-      transports: ['polling'] as any,
       addTrailingSlash: false
     });
 
